@@ -7,13 +7,38 @@ import java.util.Scanner;
 import dto.Article;
 import util.Util;
 
-public class ArticleController {
+public class ArticleController extends Controller {
 	private List<Article> articles;
 	private Scanner sc;
+	private String command;
+	private String actionMethodName;
 	
 	public ArticleController(List<Article> articles, Scanner sc) {
 		this.articles = articles;
 		this.sc = sc;
+	}
+	
+	public void doAction(String actionMethodName, String command) {
+		this.command = command;
+		this.actionMethodName = actionMethodName;
+		
+		switch (actionMethodName) {
+		case "write":
+			doWrite();
+			break;
+		case "list":
+			showList();
+			break;
+		case "detail":
+			showDetail();
+			break;
+		case "modify":
+			doModify();
+			break;
+		case "delete":
+			doDelete();
+			break;
+		}
 	}
 	
 	int lastArticleId = 3;
@@ -38,7 +63,7 @@ public class ArticleController {
 	}
 	
 	// 목록
-	public void showList(String command) {
+	public void showList() {
 		if (articles.size() == 0) {
 			System.out.println("게시글이 없습니다.");
 			return;
@@ -76,7 +101,7 @@ public class ArticleController {
 	}
 	
 	// 세부사항
-	public void showDetail(String command) {
+	public void showDetail() {
 		String[] cmdDiv = command.split(" ");
 		
 		if (cmdDiv.length < 3) {
@@ -104,7 +129,7 @@ public class ArticleController {
 	}
 	
 	// 수정
-	public void doModify(String command) {
+	public void doModify() {
 		String[] cmdDiv = command.split(" ");
 		
 		if (cmdDiv.length < 3) {
@@ -137,7 +162,7 @@ public class ArticleController {
 	}
 	
 	// 삭제
-	public void doDelete(String command) {
+	public void doDelete() {
 		String[] cmdDiv = command.split(" ");
 		
 		if (cmdDiv.length < 3) {

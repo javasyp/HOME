@@ -3,6 +3,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import controller.ArticleController;
+import controller.Controller;
 import controller.MemberController;
 import dto.Article;
 import dto.Member;
@@ -29,6 +30,8 @@ public class App {
 		// 아티클 컨트롤러 생성
 		ArticleController articleController = new ArticleController(articles, sc);
 		
+		Controller controller;
+		
 		articleController.makeTestData();
 		
 		while (true) {
@@ -45,33 +48,46 @@ public class App {
 				break;
 			}
 			
-			// 회원가입
-			if (command.equals("member join")) {
-				memberController.doJoin();
-				
-			// 작성
-			} else if (command.equals("article write")) {
-				articleController.doWrite();
+			String[] commandDiv = command.split(" ");	// article delete ! / member join
 			
-			// 목록
-			} else if (command.startsWith("article list")) {
-				articleController.showList(command);
-				
-			// 세부사항
-			} else if (command.startsWith("article detail")) {
-				articleController.showDetail(command);
+			String controllerName = commandDiv[0];	// article / member
 			
-			// 수정
-			}  else if (command.startsWith("article modify")) {
-				articleController.doModify(command);
-				
-			// 삭제
-			} else if (command.startsWith("article delete")) {
-				articleController.doDelete(command);
-				
+			if (commandDiv.length == 1) {	// 단어가 하나만 들어왔을 때
+				System.out.println("명령어를 확인해 주세요.");
+			}
+			
+			String actionMethodName = commandDiv[1];	// list, write, join ··· 등
+			
+			controller = null;
+			
+			// 컨트롤러 선택
+			if (controllerName.equals("article")) {
+				controller = articleController;
+			} else if (controllerName.equals("member")) {
+				controller = memberController;
 			} else {
 				System.out.println("존재하지 않는 명령어입니다.");
+				continue;
 			}
+			
+			// 실질적인 일 (어떤 건 인자가 있고 어떤 건 없어서 통일시키기 위함)
+			controller.doAction(actionMethodName, command);
+			
+//			if (command.equals("member join")) {
+//				memberController.doJoin();
+//			} else if (command.equals("article write")) {
+//				articleController.doWrite();
+//			} else if (command.startsWith("article list")) {
+//				articleController.showList(command);
+//			} else if (command.startsWith("article detail")) {
+//				articleController.showDetail(command);
+//			} else if (command.startsWith("article modify")) {
+//				articleController.doModify(command);
+//			} else if (command.startsWith("article delete")) {
+//				articleController.doDelete(command);
+//			} else {
+//				System.out.println("존재하지 않는 명령어입니다.");
+//			}
 		}
 		
 		System.out.println("== 프로그램 끝 ==");
