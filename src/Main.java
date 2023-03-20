@@ -147,21 +147,29 @@ public class Main {
 	}
 
 	private static int getArticleIndexById(int id) {
-		for (int i = 0; i < articles.size(); i++) {
-			Article article = articles.get(i);
+		int i = 0;
+		
+		for (Article article : articles) {
 			if (article.id == id) {
 				return i;
 			}
+			i++;
 		}
 		return -1;
 	}
 
 	private static Article getArticleById(int id) {
-		for (int i = 0; i < articles.size(); i++) {
-			Article article = articles.get(i);
-			if (article.id == id) {
-				return article;
-			}
+//		for (Article article : articles) {
+//			if (article.id == id) {
+//				return article;
+//			}
+//		}
+//		return null;
+		
+		int index = getArticleIndexById(id);
+
+		if (index != -1) {
+			return articles.get(index);
 		}
 		return null;
 	}
