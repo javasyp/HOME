@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 public class Main {
 	static List<Article> articles = new ArrayList<>();
+	static List<Member> members = new ArrayList<>();
 
 	public static void main(String[] args) {
 		System.out.println("== 프로그램 시작 ==");
@@ -13,6 +14,7 @@ public class Main {
 		Scanner sc = new Scanner(System.in);
 		
 		int lastArticleId = 3;
+		int lastMemberId = 0;
 		
 		while (true) {
 			System.out.print("명령어 > ");
@@ -28,8 +30,58 @@ public class Main {
 				break;
 			}
 			
+			// 회원가입
+			if (command.equals("member join")) {
+				int id = lastMemberId + 1;
+				
+				String regDate = Util.getNowDateTimeStr();
+				String loginId = null;
+				
+				while (true) {
+					System.out.print("아이디 : ");
+					loginId = sc.nextLine();
+					
+					// 아이디 중복 체크
+					if (isJoinableLoginId(loginId) == false) {
+						System.out.println("이미 사용 중인 아이디입니다.");
+						continue;
+					}
+					
+					break;	// true일 경우 빠져나오기
+				}
+				
+				System.out.print("비밀번호 : ");
+				String loginPw = sc.nextLine();
+				
+				System.out.print("이름 : ");
+				String name = sc.nextLine();
+				
+				Member member = new Member(id, regDate, regDate, loginId, loginPw, name);
+				members.add(member);
+
+				System.out.printf("%d번 회원이 가입되었습니다.\n", id);
+				lastMemberId++;
+				
+			// 작성
+			} else if (command.equals("article write")) {
+				int id = lastArticleId + 1;
+				
+				String regDate = Util.getNowDateTimeStr();
+				
+				System.out.print("제목 : ");
+				String title = sc.nextLine();
+				
+				System.out.print("내용 : ");
+				String body = sc.nextLine();
+				
+				Article article = new Article(id, regDate, regDate, title, body);
+				articles.add(article);
+	
+				System.out.printf("%d번 글이 생성되었습니다.\n", id);
+				lastArticleId++;
+			
 			// 목록
-			if (command.startsWith("article list")) {
+			} else if (command.startsWith("article list")) {
 				if (articles.size() == 0) {
 					System.out.println("게시글이 없습니다.");
 					continue;
@@ -63,25 +115,7 @@ public class Main {
 					Article article = forPrintArticles.get(i);
 					System.out.printf("  %d  //  %s  //  %d  \n", article.id, article.title, article.hit);
 				}
-			
-			// 작성
-			} else if (command.equals("article write")) {
-				int id = lastArticleId + 1;
 				
-				String regDate = Util.getNowDateTimeStr();
-				
-				System.out.print("제목 : ");
-				String title = sc.nextLine();
-				
-				System.out.print("내용 : ");
-				String body = sc.nextLine();
-				
-				Article article = new Article(id, regDate, regDate, title, body);
-				articles.add(article);
-
-				System.out.printf("%d번 글이 생성되었습니다.\n", id);
-				lastArticleId++;
-			
 			// 세부사항
 			} else if (command.startsWith("article detail")) {
 				String[] cmdDiv = command.split(" ");
@@ -169,7 +203,31 @@ public class Main {
 		
 		sc.close();
 	}
+	
+	// 아이디 중복 체크
+	private static boolean isJoinableLoginId(String loginId) {
+		int index = getMemberIndexByloginId(loginId);
 
+		if (index == -1) {	// 찾아봤는데 없던데? 해당 아이디 사용 가능
+			return true;
+		}
+		return false;
+	}
+	
+	private static int getMemberIndexByloginId(String loginId) {
+		int i = 0;
+		
+		for (Member member : members) {	// 순회
+			if (member.loginId.equals(loginId)) {	// 지금 입력한 아이디랑 똑같은 아이디 있나?
+				return i;	// 있으면(중복이면) i값 반환 (i > -1)
+			}
+			i++;
+		}
+		return -1;	// 없으면 -1 반환
+	}
+
+	
+	// 게시글 인덱스 찾기 (삭제 기능)
 	private static int getArticleIndexById(int id) {
 		int i = 0;
 		
@@ -181,7 +239,8 @@ public class Main {
 		}
 		return -1;
 	}
-
+	
+	// 게시글 번호 찾기 (세부사항 및 수정 기능)
 	private static Article getArticleById(int id) {
 //		for (Article article : articles) {
 //			if (article.id == id) {
@@ -203,6 +262,24 @@ public class Main {
 		articles.add(new Article(1, Util.getNowDateTimeStr(), Util.getNowDateTimeStr(), "제목1", "내용1", 11));
 		articles.add(new Article(2, Util.getNowDateTimeStr(), Util.getNowDateTimeStr(), "제목2", "내용2", 22));
 		articles.add(new Article(3, Util.getNowDateTimeStr(), Util.getNowDateTimeStr(), "제목3", "내용3", 33));
+	}
+}
+
+class Member {
+	int id;
+	String regDate;
+	String updateDate;
+	String loginId;
+	String loginPw;
+	String name;
+	
+	Member(int id, String regDate, String updateDate, String loginId, String loginPw, String name) {
+		this.id = id;
+		this.regDate = regDate;
+		this.updateDate = updateDate;
+		this.loginId = loginId;
+		this.loginPw = loginPw;
+		this.name = name;
 	}
 }
 
