@@ -29,15 +29,39 @@ public class Main {
 			}
 			
 			// 목록
-			if (command.equals("article list")) {
+			if (command.startsWith("article list")) {
 				if (articles.size() == 0) {
-					System.out.println("게시글이 없습니다.");					
-				} else {
-					System.out.println("번호 //  제목   //  조회  ");
-					for (int i = articles.size() - 1; i >= 0; i--) {
-						Article article = articles.get(i);
-						System.out.printf("  %d  //  %s  //  %d  \n", article.id, article.title, article.hit);
+					System.out.println("게시글이 없습니다.");
+					continue;
+				}
+				
+				// 검색 기능
+				String searchKeyword = command.substring("article list".length()).trim();	// article list 다음 부분의 길이
+				
+				List<Article> forPrintArticles = articles;
+				
+				if (searchKeyword.length() > 0) {	// 검색어가 있다!
+					System.out.println("검색어 : " + searchKeyword);
+					
+					forPrintArticles = new ArrayList<>();	// 검색어를 포함하는 요소들만 골라서 새로운 리스트에 담기
+					
+					for (Article article : articles) {
+						if (article.title.contains(searchKeyword)) {	// article의 제목이 searchKeyword를 포함하고 있으면
+							forPrintArticles.add(article);
+						}
 					}
+					
+					if (forPrintArticles.size() == 0) {
+						System.out.println("검색 결과가 없습니다.");
+						continue;
+					}
+				}
+				
+				// 원본(검색어가 없는 경우) 출력 또는 검색어가 있는 경우 출력
+				System.out.println("번호 //  제목   //  조회  ");
+				for (int i = forPrintArticles.size() - 1; i >= 0; i--) {
+					Article article = forPrintArticles.get(i);
+					System.out.printf("  %d  //  %s  //  %d  \n", article.id, article.title, article.hit);
 				}
 			
 			// 작성
