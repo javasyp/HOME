@@ -50,8 +50,24 @@ public class Main {
 					break;	// true일 경우 빠져나오기
 				}
 				
-				System.out.print("비밀번호 : ");
-				String loginPw = sc.nextLine();
+				String loginPw = null;
+				String loginPwConfirm = null;
+				
+				while (true) {
+					// 비밀번호 확인
+					System.out.print("비밀번호 : ");
+					loginPw = sc.nextLine();
+					
+					System.out.print("비밀번호 확인 : ");
+					loginPwConfirm = sc.nextLine();
+					
+					if (loginPw.equals(loginPwConfirm) == false) {
+						System.out.println("비밀번호를 확인해 주세요.");
+						continue;
+					}
+					
+					break;	// 일치하면 빠져나오기
+				}
 				
 				System.out.print("이름 : ");
 				String name = sc.nextLine();
