@@ -10,12 +10,7 @@ import dto.Member;
 
 public class App {
 	
-	List<Article> articles;
-	List<Member> members;
-	
-	public App() {	// 생성자 호출 (의도적으로 실행하자마자 리스트 생성)
-		articles = new ArrayList<>();
-		members = new ArrayList<>();
+	public App() {
 	}
 	
 	public void start() {
@@ -25,10 +20,10 @@ public class App {
 
 		// 멤버 컨트롤러 생성
 		// 매개변수와 인자 활용하여 members와 sc 넘기기 - 멤버 컨트롤러에서 사용하기 위함
-		MemberController memberController = new MemberController(members, sc);
+		MemberController memberController = new MemberController(sc);
 		
 		// 아티클 컨트롤러 생성
-		ArticleController articleController = new ArticleController(articles, sc);
+		ArticleController articleController = new ArticleController(sc);
 		
 		Controller controller;
 		
@@ -54,6 +49,7 @@ public class App {
 			
 			if (commandDiv.length == 1) {	// 단어가 하나만 들어왔을 때
 				System.out.println("명령어를 확인해 주세요.");
+				continue;
 			}
 			
 			String actionMethodName = commandDiv[1];	// list, write, join ··· 등

@@ -13,8 +13,8 @@ public class ArticleController extends Controller {
 	private String command;
 	private String actionMethodName;
 	
-	public ArticleController(List<Article> articles, Scanner sc) {
-		this.articles = articles;
+	public ArticleController(Scanner sc) {
+		this.articles = new ArrayList<>();	// 각각 컨트롤러 내부에 있는 A.L 사용
 		this.sc = sc;
 	}
 	
@@ -38,13 +38,16 @@ public class ArticleController extends Controller {
 		case "delete":
 			doDelete();
 			break;
+		default:
+			System.out.println("해당 기능은 사용할 수 없습니다.");
+			break;
 		}
 	}
 	
 	int lastArticleId = 3;
 	
 	// 작성
-	public void doWrite() {
+	private void doWrite() {
 		int id = lastArticleId + 1;
 		
 		String regDate = Util.getNowDateTimeStr();
@@ -63,7 +66,7 @@ public class ArticleController extends Controller {
 	}
 	
 	// 목록
-	public void showList() {
+	private void showList() {
 		if (articles.size() == 0) {
 			System.out.println("게시글이 없습니다.");
 			return;
@@ -101,7 +104,7 @@ public class ArticleController extends Controller {
 	}
 	
 	// 세부사항
-	public void showDetail() {
+	private void showDetail() {
 		String[] cmdDiv = command.split(" ");
 		
 		if (cmdDiv.length < 3) {
@@ -129,7 +132,7 @@ public class ArticleController extends Controller {
 	}
 	
 	// 수정
-	public void doModify() {
+	private void doModify() {
 		String[] cmdDiv = command.split(" ");
 		
 		if (cmdDiv.length < 3) {
@@ -162,7 +165,7 @@ public class ArticleController extends Controller {
 	}
 	
 	// 삭제
-	public void doDelete() {
+	private void doDelete() {
 		String[] cmdDiv = command.split(" ");
 		
 		if (cmdDiv.length < 3) {
