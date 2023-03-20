@@ -16,7 +16,8 @@ public class MemberController {
 	}
 	
 	int lastMemberId = 0;
-
+	
+	// 회원가입
 	public void doJoin() {
 		int id = lastMemberId + 1;
 		
@@ -67,25 +68,25 @@ public class MemberController {
 	}
 	
 	// 아이디 중복 체크
-		private boolean isJoinableLoginId(String loginId) {
-			int index = getMemberIndexByloginId(loginId);
+	private boolean isJoinableLoginId(String loginId) {
+		int index = getMemberIndexByloginId(loginId);
 
-			if (index == -1) {	// 찾아봤는데 없던데? 해당 아이디 사용 가능
-				return true;
-			}
-			return false;
+		if (index == -1) {	// 찾아봤는데 없던데? 해당 아이디 사용 가능
+			return true;
 		}
+		return false;
+	}
+	
+	private int getMemberIndexByloginId(String loginId) {
+		int i = 0;
 		
-		private int getMemberIndexByloginId(String loginId) {
-			int i = 0;
-			
-			for (Member member : members) {	// 순회
-				if (member.loginId.equals(loginId)) {	// 지금 입력한 아이디랑 똑같은 아이디 있나?
-					return i;	// 있으면(중복이면) i값 반환 (i > -1)
-				}
-				i++;
+		for (Member member : members) {	// 순회
+			if (member.loginId.equals(loginId)) {	// 지금 입력한 아이디랑 똑같은 아이디 있나?
+				return i;	// 있으면(중복이면) i값 반환 (i > -1)
 			}
-			return -1;	// 없으면 -1 반환
+			i++;
 		}
+		return -1;	// 없으면 -1 반환
+	}
 		
 }
