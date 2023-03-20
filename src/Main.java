@@ -16,7 +16,7 @@ public class Main {
 		while (true) {
 			System.out.print("명령어 > ");
 			 
-			String command = sc.nextLine();
+			String command = sc.nextLine().trim();
 			
 			if (command.length() == 0) {
 				System.out.println("명령어를 입력해주세요");
@@ -53,6 +53,15 @@ public class Main {
 				System.out.printf("%d번 글이 생성되었습니다.\n", id);
 				lastArticleId++;
 
+			} else if (command.startsWith("article detail")) {
+				String[] cmdDiv = command.split(" ");
+				
+				System.out.println(cmdDiv[2]);
+				
+				int id = Integer.parseInt(cmdDiv[2]);
+				
+				System.out.printf("%d번 게시물은 존재하지 않습니다.\n", id);
+				
 			} else {
 				System.out.println("존재하지 않는 명령어입니다.");
 			}
