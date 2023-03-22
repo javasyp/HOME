@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import dto.Article;
 import dto.Member;
 import util.Util;
 
@@ -13,7 +14,7 @@ public class MemberController extends Controller {
 	private String command;
 	private String actionMethodName;
 	
-	private Member loginedMember;	// 로그인/로그아웃 상태를 알 수 있는 전역변수
+	private Member loginedMember = null;	// 로그인/로그아웃 상태를 알 수 있는 전역변수
 	
 	int lastMemberId = 0;
 	
@@ -33,14 +34,48 @@ public class MemberController extends Controller {
 		case "login":
 			doLogin();
 			break;
+		case "profile":
+			showProfile();
+			break;
+		case "logout":
+			doLogout();
+			break;
 		default:
 			System.out.println("해당 기능은 사용할 수 없습니다.");
 			break;
 		}
 	}
 	
+	// 로그아웃
+	private void doLogout() {
+		if (isLogined() == false) {		// 로그아웃 상태이면
+			System.out.println("현재 로그아웃 상태입니다. 로그인 후 이용해 주세요.");
+			return;
+		}
+		
+		System.out.println(loginedMember.name + "님, 로그아웃 되었습니다.");
+		loginedMember = null;
+	}
+
+	// 프로필
+	private void showProfile() {
+		if (isLogined() == false) {		// 로그아웃 상태이면
+			System.out.println("현재 로그아웃 상태입니다. 로그인 후 이용해 주세요.");
+			return;
+		}
+		
+		System.out.println("== 현재 로그인한 회원의 정보 ==");
+		System.out.println("아이디 : " + loginedMember.loginId);
+		System.out.println("이름 : " + loginedMember.name);
+	}
+
 	// 로그인
-	private void doLogin() {		
+	private void doLogin() {
+		if (isLogined()) {		// 로그인 상태이면
+			System.out.println("현재 로그인 상태입니다. 로그아웃 후 이용해 주세요.");
+			return;
+		}
+		
 		System.out.print("아이디 : ");
 		String loginId = sc.nextLine();
 		
@@ -118,6 +153,11 @@ public class MemberController extends Controller {
 		
 	}
 	
+	// 중복 로그인/로그아웃 차단
+	private boolean isLogined() {
+		return loginedMember != null;
+	}
+	
 	// 로그인 시 아이디 확인
 	private Member getMemberByloginId(String loginId) {
 		int index = getMemberIndexByloginId(loginId);
@@ -149,6 +189,13 @@ public class MemberController extends Controller {
 			i++;
 		}
 		return -1;	// 없으면 -1 반환
+	}
+
+	public void makeTestData() {
+		System.out.println("테스트를 위한 회원 데이터를 생성합니다.");
+		members.add(new Member(1, Util.getNowDateTimeStr(), Util.getNowDateTimeStr(), "test1", "test1", "test1"));
+		members.add(new Member(2, Util.getNowDateTimeStr(), Util.getNowDateTimeStr(), "test2", "test2", "test2"));
+		members.add(new Member(3, Util.getNowDateTimeStr(), Util.getNowDateTimeStr(), "test3", "test3", "test3"));
 	}
 		
 }
