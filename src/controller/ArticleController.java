@@ -13,6 +13,8 @@ public class ArticleController extends Controller {
 	private String command;
 	private String actionMethodName;
 	
+	int lastArticleId = 3;
+	
 	public ArticleController(Scanner sc) {
 		this.articles = new ArrayList<>();	// 각각 컨트롤러 내부에 있는 A.L 사용
 		this.sc = sc;
@@ -43,8 +45,6 @@ public class ArticleController extends Controller {
 			break;
 		}
 	}
-	
-	int lastArticleId = 3;
 	
 	// 작성
 	private void doWrite() {
